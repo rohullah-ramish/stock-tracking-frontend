@@ -1,14 +1,13 @@
 The task is to prepare a web application for tracking stock index values.
-Formal Requirements for the Application
 
+Formal Requirements for the Application:
 1. User login/registration system
 2. Overview of available stock indices
 3. Graphical representation (chart) of the index value for a given day
 4. Alert system: the ability for users to set a price threshold for an index, above or below which they will receive an email notification (this functionality should be adapted to the capabilities of the chosen API)
 5. Optional: A subpage with statistics on API queries, showing the usage of the given plan
 
-Technical Requirements
-
+Technical Requirements:
 1. Firebase Authentication for user management
 2. Express.js or NestJS
 3. Next.js

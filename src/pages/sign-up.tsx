@@ -1,7 +1,7 @@
-import { useState } from "react";
-
 import Link from "next/link";
-import { useRouter } from "next/router";
+import Head from "next/head";
+
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,13 +14,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import AuthManager from "@/firebase/auth";
-
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-export default function SignIn() {
+import AuthManager from "@/firebase/auth";
+
+import { useRouter } from "next/router";
+
+function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState<string | undefined>();
@@ -30,9 +33,18 @@ export default function SignIn() {
   async function handleSubmit() {
     if (isLoading) return;
 
+    if (password.length < 6) {
+      setError("Password should be at least 6 characters");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
     setLoading(true);
 
-    const result = await AuthManager.signIn(email, password);
+    const result = await AuthManager.signUp(email, password);
 
     if (!result.success) setError(result.message);
     else router.push("/dashboard");
@@ -44,9 +56,9 @@ export default function SignIn() {
     <div className="w-screen h-screen flex items-center justify-center">
       <Card className="mx-auto max-w-sm">
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardTitle className="text-xl">Sign Up</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Enter your information to create an account
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -69,7 +81,15 @@ export default function SignIn() {
                 onChange={(e) => setPassword(e.target.value)}
                 id="password"
                 type="password"
-                required
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="password">Confirm Password</Label>
+              <Input
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                id="confirmPassword"
+                type="password"
               />
             </div>
             {error && (
@@ -81,18 +101,30 @@ export default function SignIn() {
               {isLoading ? (
                 <AiOutlineLoading3Quarters className="animate-spin" />
               ) : (
-                "Login"
+                "Create an account"
               )}
             </Button>
           </div>
           <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{" "}
-            <Link href="/sign-up" className="underline">
-              Sign up
+            Already have an account?{" "}
+            <Link href="/" className="underline">
+              Sign in
             </Link>
           </div>
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function SignUpPage() {
+  return (
+    <>
+      <Head>
+        <title>Sign Up</title>
+      </Head>
+
+      <SignUp />
+    </>
   );
 }
