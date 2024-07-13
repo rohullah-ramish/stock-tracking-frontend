@@ -1,24 +1,12 @@
-import { Button } from "@/components/ui/button";
-import { useUser } from "@/stores/user";
-import { useRouter } from "next/router";
+import MainLayout from "@/layouts/mainLayout";
+import StocksOverview from "@/components/stocks-overview";
 
-export default function Home() {
-  const router = useRouter();
-
-  const { deleteSession } = useUser();
-
-  function handleSignOut() {
-    deleteSession();
-    router.push("/");
-  }
-
+export default function Dashboard() {
   return (
-    <div>
-      <h1>Dashboard</h1>
-
-      <Button onClick={handleSignOut}>Sign Out</Button>
-    </div>
+    <MainLayout>
+      <StocksOverview />
+    </MainLayout>
   );
 }
 
-Home.auth = true;
+Dashboard.auth = true;
