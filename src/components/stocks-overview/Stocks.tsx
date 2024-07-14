@@ -6,6 +6,7 @@ import AutoSizer from "react-virtualized-auto-sizer";
 import { Card, CardHeader } from "@/components/ui/card";
 import { ChevronRight } from "lucide-react";
 import { Button } from "../ui/button";
+import Link from "next/link";
 
 type StocksProps = {
   stocksData: Stock[];
@@ -40,10 +41,12 @@ function Stocks(props: StocksProps) {
             </div>
             <div className="flex items-center gap-10">
               <p className="text-lg text-[green]">${stock.price.toFixed(2)}</p>
-              <Button variant="outline" className="duration-300">
-                <span>Details</span>
-                <ChevronRight className="ps-2 text-[16px]" />
-              </Button>
+              <Link href={`/${stock.symbol}`}>
+                <Button variant="outline" className="duration-300">
+                  <span>Details</span>
+                  <ChevronRight className="ps-2 text-[16px]" />
+                </Button>
+              </Link>
             </div>
           </CardHeader>
         </Card>

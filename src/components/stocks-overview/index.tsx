@@ -109,7 +109,7 @@ function StocksOverview() {
       .finally(() => setLoading(false));
   }
 
-  useEffect(() => fetchStocksData(), []);
+  // useEffect(() => fetchStocksData(), []);
 
   const filteredStocks = useMemo(() => {
     let filtered = stocksData;
