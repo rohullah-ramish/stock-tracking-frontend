@@ -13,80 +13,11 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 
-const __ = [
-  {
-    symbol: "CSLR",
-    name: "1 Complete Solaria Inc. Common Stock",
-    price: 1.75,
-    percentchange: 8.6957,
-  },
-  {
-    symbol: "CSLR",
-    name: "2 Complete Solaria Inc. Common Stock",
-    price: 1.75,
-    percentchange: 8.6957,
-  },
-  {
-    symbol: "CSLR",
-    name: "3 Complete Solaria Inc. Common Stock",
-    price: 1.75,
-    percentchange: 8.6957,
-  },
-  {
-    symbol: "CSLR",
-    name: "4 Complete Solaria Inc. Common Stock",
-    price: 1.75,
-    percentchange: 8.6957,
-  },
-  {
-    symbol: "CSLR",
-    name: "5 Complete Solaria Inc. Common Stock",
-    price: 12.75,
-    percentchange: 8.6957,
-  },
-  {
-    symbol: "CSLR",
-    name: "6 Complete Solaria Inc. Common Stock",
-    price: 5.75,
-    percentchange: 8.6957,
-  },
-  {
-    symbol: "CSLR",
-    name: "7 Complete Solaria Inc. Common Stock",
-    price: 1.75,
-    percentchange: 8.6957,
-  },
-  {
-    symbol: "CSLR",
-    name: "8 Complete Solaria Inc. Common Stock",
-    price: 0.75,
-    percentchange: -8.6957,
-  },
-  {
-    symbol: "CSLR",
-    name: "9 Complete Solaria Inc. Common Stock",
-    price: 1.75,
-    percentchange: 5.6957,
-  },
-  {
-    symbol: "CSLR",
-    name: "10 Complete Solaria Inc. Common Stock",
-    price: 1.75,
-    percentchange: 1.6957,
-  },
-  {
-    symbol: "CSLR",
-    name: "11 Complete Solaria Inc. Common Stock",
-    price: 1.75,
-    percentchange: 9.6957,
-  },
-];
-
 function StocksOverview() {
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState<string | undefined>();
 
-  const [stocksData, setStocksData] = useState<Stock[]>(__);
+  const [stocksData, setStocksData] = useState<Stock[]>([]);
 
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -109,7 +40,7 @@ function StocksOverview() {
       .finally(() => setLoading(false));
   }
 
-  // useEffect(() => fetchStocksData(), []);
+  useEffect(() => fetchStocksData(), []);
 
   const filteredStocks = useMemo(() => {
     let filtered = stocksData;

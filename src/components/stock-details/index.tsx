@@ -6,25 +6,34 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 
-import { CalendarDaysIcon } from "lucide-react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
-import { getStockDetails, Stock } from "@/services/wallstreet";
+import { getStockDetails } from "@/services/wallstreet";
+
+import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { DateRange } from "react-day-picker";
+
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
 
 const CandleChart = dynamic(() => import("./CandleChart"), { ssr: false });
 
 export default function StockDetails() {
-  const [symbol, setSymbol] = useState<string | undefined>();
-  const [dateRange, setDateRange] = useState({
-    startDate: new Date(2023, 5, 1),
-    endDate: new Date(2023, 5, 30),
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: new Date(2024, 1, 1),
+    to: new Date(2024, 3, 30),
   });
 
   const [series, setSeries] = useState<ApexAxisChartSeries>([]);
 
-  function fetchStockDetails(symbol: string) {
+  function fetchStockDetails(
+    symbol: string,
+    from: string = "2024-03-01",
+    to: string = "2024-06-30"
+  ) {
     if (symbol)
-      getStockDetails(symbol, "2024-03-01", "2024-06-30").then((response) => {
+      getStockDetails(symbol, from, to).then((response) => {
         if (response.success) {
           setSeries([
             {
@@ -44,10 +53,25 @@ export default function StockDetails() {
   useEffect(() => {
     const s = router.query.symbol as string;
     if (s) {
-      setSymbol(s);
-      fetchStockDetails(s);
+      if (date?.from && date?.to) {
+        fetchStockDetails(
+          s,
+          `${date?.from?.getFullYear()}-${(date?.from?.getMonth() + 1)
+            .toString()
+            .padStart(2, "0")}-${date?.from
+            ?.getDate()
+            .toString()
+            .padStart(2, "0")}`,
+          `${date?.to?.getFullYear()}-${(date?.to?.getMonth() + 1)
+            .toString()
+            .padStart(2, "0")}-${date?.to
+            ?.getDate()
+            .toString()
+            .padStart(2, "0")}`
+        );
+      }
     } else router.replace("/overview");
-  }, [router.query]);
+  }, [router.query, date?.from, date?.to]);
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
@@ -56,25 +80,49 @@ export default function StockDetails() {
           <div className="grid gap-6">
             <div className="flex items-center justify-between">
               <h1 className="text-lg font-bold">
-                Stock Details ({symbol?.toUpperCase()})
+                Stock Details ({(router.query.symbol as string)?.toUpperCase()})
               </h1>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" className="flex items-center gap-2">
-                    <CalendarDaysIcon className="h-4 w-4" />
-                    <span>
-                      {dateRange.startDate.toLocaleDateString()} -{" "}
-                      {dateRange.endDate.toLocaleDateString()}
-                    </span>
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <div />
-                </PopoverContent>
-              </Popover>
+              <div className="grid gap-2">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      id="date"
+                      variant={"outline"}
+                      className={cn(
+                        "w-[300px] justify-start text-left font-normal",
+                        !date && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {date?.from ? (
+                        date.to ? (
+                          <>
+                            {format(date.from, "LLL dd, y")} -{" "}
+                            {format(date.to, "LLL dd, y")}
+                          </>
+                        ) : (
+                          format(date.from, "LLL dd, y")
+                        )
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      initialFocus
+                      mode="range"
+                      defaultMonth={date?.from}
+                      selected={date}
+                      onSelect={setDate}
+                      numberOfMonths={2}
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
             </div>
             <div className="h-[500px]">
-              <CandleChart title={`${symbol}`} series={series} />
+              <CandleChart title={`${router.query.symbol}`} series={series} />
             </div>
           </div>
         </main>
