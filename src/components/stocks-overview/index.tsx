@@ -116,11 +116,15 @@ function StocksOverview() {
 
     filtered = filtered.filter(
       (item) =>
-        item.name.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1 ||
-        item.symbol.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1
+        item.name?.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1 ||
+        item.symbol?.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1
     );
 
     filtered = filtered.sort((a, b) => {
+      if (a.price === undefined || b.price === undefined) return 0;
+      if (a.percentchange === undefined || b.percentchange === undefined)
+        return 0;
+
       switch (sortBy) {
         case "price":
           return sortDirection === "asc"

@@ -25,22 +25,24 @@ function Stocks(props: StocksProps) {
             <div>
               <h3 className="text-lg flex items-center justify-center gap-2">
                 <span>{stock.name}</span>
-                <span
-                  className={`py-1 px-2 rounded-full text-xs font-medium ${
-                    stock.percentchange >= 0
-                      ? "bg-green-500/20 text-green-500"
-                      : "bg-red-500/20 text-red-500"
-                  }`}
-                >
-                  {stock.percentchange >= 0
-                    ? `+${stock.percentchange}%`
-                    : `${stock.percentchange}%`}
-                </span>
+                {stock.percentchange && (
+                  <span
+                    className={`py-1 px-2 rounded-full text-xs font-medium ${
+                      stock.percentchange >= 0
+                        ? "bg-green-500/20 text-green-500"
+                        : "bg-red-500/20 text-red-500"
+                    }`}
+                  >
+                    {stock.percentchange >= 0
+                      ? `+${stock.percentchange}%`
+                      : `${stock.percentchange}%`}
+                  </span>
+                )}
               </h3>
               <p className="text-muted-foreground">{stock.symbol}</p>
             </div>
             <div className="flex items-center gap-10">
-              <p className="text-lg text-[green]">${stock.price.toFixed(2)}</p>
+              <p className="text-lg text-[green]">${stock.price?.toFixed(2)}</p>
               <Link href={`/${stock.symbol}`}>
                 <Button variant="outline" className="duration-300">
                   <span>Details</span>
