@@ -3,8 +3,7 @@ import { PropsWithChildren } from "react";
 
 import { Button } from "@/components/ui/button";
 import { UserProvider, useUser } from "@/stores/user";
-
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { LoaderCircle } from "lucide-react";
 
 type AuthWrapperProps = {
   isProtected: boolean;
@@ -35,7 +34,7 @@ function AuthGuard(props: PropsWithChildren<AuthWrapperProps>) {
 function AuthLoader() {
   return (
     <div className="fixed top-0 left-0 z-[5] w-screen h-screen flex items-center justify-center bg-[#FAFAFA]">
-      <AiOutlineLoading3Quarters className="animate-spin text-[30px]" />
+      <LoaderCircle className="animate-spin text-[30px]" />
     </div>
   );
 }

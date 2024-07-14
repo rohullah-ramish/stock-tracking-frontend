@@ -41,7 +41,6 @@ function UserProvider(props: PropsWithChildren<UserProviderProps>) {
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
-      console.log("State Changed", { user });
       setUser(user);
       setLoading(false);
     });

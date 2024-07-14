@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label";
 
 import AuthManager from "@/firebase/auth";
 
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { LoaderCircle } from "lucide-react";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -35,7 +35,7 @@ export default function SignIn() {
     const result = await AuthManager.signIn(email, password);
 
     if (!result.success) setError(result.message);
-    else router.push("/dashboard");
+    else router.push("/overview");
 
     setLoading(false);
   }
@@ -78,11 +78,7 @@ export default function SignIn() {
               </div>
             )}
             <Button type="submit" className="w-full" onClick={handleSubmit}>
-              {isLoading ? (
-                <AiOutlineLoading3Quarters className="animate-spin" />
-              ) : (
-                "Login"
-              )}
+              {isLoading ? <LoaderCircle className="animate-spin" /> : "Login"}
             </Button>
           </div>
           <div className="mt-4 text-center text-sm">

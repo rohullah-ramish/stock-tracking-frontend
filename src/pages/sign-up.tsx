@@ -14,11 +14,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-
 import AuthManager from "@/firebase/auth";
 
 import { useRouter } from "next/router";
+import { LoaderCircle } from "lucide-react";
 
 function SignUp() {
   const [email, setEmail] = useState("");
@@ -47,7 +46,7 @@ function SignUp() {
     const result = await AuthManager.signUp(email, password);
 
     if (!result.success) setError(result.message);
-    else router.push("/dashboard");
+    else router.push("/overview");
 
     setLoading(false);
   }
@@ -99,7 +98,7 @@ function SignUp() {
             )}
             <Button type="submit" className="w-full" onClick={handleSubmit}>
               {isLoading ? (
-                <AiOutlineLoading3Quarters className="animate-spin" />
+                <LoaderCircle className="animate-spin" />
               ) : (
                 "Create an account"
               )}
